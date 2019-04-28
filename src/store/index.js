@@ -7,11 +7,6 @@ function orderReducer(state = [], action) {
     case "@@ORDERS/ADD_ORDER": {
       return [...state, action.payload.order];
     }
-    case "@@ORDERS/UPDATE_ORDER": {
-      return [...state, action.payload.order];
-    }
-    default:
-      return state;
   }
 }
 const store = createStore(
