@@ -29,7 +29,10 @@ const OrderDetail = props => {
 
           <Products>
             <h2>Lista de productos</h2>
-            <ProductList products={order.products} />
+            <ProductList
+              onUpdatePercentage={props.onUpdatePercentage}
+              products={order.products}
+            />
           </Products>
         </>
       ) : (

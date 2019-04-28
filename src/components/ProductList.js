@@ -16,7 +16,7 @@ const List = styled.div`
   display: grid;
   grid-template-columns: 1fr 16%;
 `;
-const Button = styled.button`
+const Action = styled.button`
   background-color: #2ecc71;
   border: 0;
   margin: 0 0 12px;
@@ -25,25 +25,38 @@ const Button = styled.button`
   font-size: 16px;
 `;
 
-const handleOnClick = props => {
-  console.log(props);
-};
+class ProductList extends React.Component {
+  state = {
+    productSelected: []
+  };
 
-const ProductList = props => {
-  const { products } = props;
+  handleOnClick = (product, index) => {
+    this.props.onUpdatePercentage(product);
+    let { productSelected } = this.state;
+    productSelected.push(index);
 
-  return (
-    <ListContainer>
-      {products.map(product => (
-        <List key={product._id}>
-          <Product product={product} />
-          <Button onClick={() => handleOnClick(product)}>
-            Alistar producto
-          </Button>
-        </List>
-      ))}
-    </ListContainer>
-  );
-};
+    this.setState({ productSelected });
+  };
+
+  render() {
+    const { products } = this.props;
+    const { productSelected } = this.state;
+
+    return (
+      <ListContainer>
+        {products.map((product, index) => (
+          <List key={product._id}>
+            <Product product={product} />
+            {!productSelected.includes(index) ? (
+              <Action onClick={() => this.handleOnClick(product, index)}>
+                Alistar producto
+              </Action>
+            ) : null}
+          </List>
+        ))}
+      </ListContainer>
+    );
+  }
+}
 
 export default ProductList;

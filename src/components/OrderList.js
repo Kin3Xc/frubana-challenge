@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import Order from "./Order";
 import OrderDetail from "./OrderDetail";
+import Status from "./StatusOrder";
 
 const Container = styled.div`
   display: grid;
@@ -24,10 +25,10 @@ const ListContainer = styled.div`
 `;
 const List = styled.div`
   display: grid;
-  grid-template-columns: 1fr 120px;
+  grid-template-columns: 1fr 130px 120px;
 `;
 
-const Button = styled.button`
+const Action = styled.button`
   background-color: #f39c12;
   border: 0;
   margin: 0 0 12px;
@@ -36,13 +37,29 @@ const Button = styled.button`
   font-size: 16px;
 `;
 
-class OrderList extends React.Component {
+class Orders extends React.Component {
   state = {
-    order: null
+    order: null,
+    enlistedOrders: []
+  };
+
+  handleUpdatePercentage = product => {
+    const { order, enlistedOrders } = this.state;
+
+    order.enlistedProducts += 1;
+
+    if (order.enlistedProducts === order.products.length) {
+      enlistedOrders.push(order);
+    }
+
+    this.setState({ order, enlistedOrders });
   };
 
   handleOnClick = order => {
-    console.log(order);
+    if (!order.enlistedProducts) {
+      order.enlistedProducts = 0;
+    }
+
     this.setState({ order });
   };
 
@@ -56,13 +73,20 @@ class OrderList extends React.Component {
           {orders.map(order => (
             <List key={order._id}>
               <Order order={order} />
-              <Button onClick={() => this.handleOnClick(order)}>
+              <Status
+                numProducts={order.products.length}
+                enlistedProducts={order.enlistedProducts}
+              />
+              <Action onClick={() => this.handleOnClick(order)}>
                 Seleccionar
-              </Button>
+              </Action>
             </List>
           ))}
         </ListContainer>
-        <OrderDetail order={order} />
+        <OrderDetail
+          onUpdatePercentage={this.handleUpdatePercentage}
+          order={order}
+        />
       </Container>
     );
   }
@@ -71,4 +95,4 @@ class OrderList extends React.Component {
 const mapStateToProps = state => ({
   orders: state.orders
 });
-export default connect(mapStateToProps)(OrderList);
+export default connect(mapStateToProps)(Orders);

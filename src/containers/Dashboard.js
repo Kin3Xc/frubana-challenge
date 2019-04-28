@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Aside from "./Aside";
 import Content from "./Content";
-import OrdersList from "../components/OrderList";
+import Orders from "../components/OrderList";
 
 const Container = styled.div`
   display: grid;
@@ -17,7 +17,7 @@ const Dashboard = () => {
     <Container>
       <Aside>Menu</Aside>
       <Content>
-        <OrdersList />
+        <Orders />
       </Content>
     </Container>
   );
