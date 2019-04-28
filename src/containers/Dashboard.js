@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
 import Aside from "./Aside";
 import Content from "./Content";
@@ -12,15 +13,20 @@ const Container = styled.div`
   grid-gap: 14px;
 `;
 
-const Dashboard = () => {
+const Dashboard = props => {
+  const { orders } = props;
   return (
     <Container>
       <Aside>Menu</Aside>
       <Content>
-        <Orders />
+        <Orders orders={orders} />
       </Content>
     </Container>
   );
 };
 
-export default Dashboard;
+const mapStateToProps = state => ({
+  orders: state.orders
+});
+
+export default connect(mapStateToProps)(Dashboard);

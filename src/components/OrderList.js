@@ -1,50 +1,42 @@
 import React from "react";
-import { connect } from "react-redux";
-import styled from "styled-components";
 import Order from "./Order";
 import OrderDetail from "./OrderDetail";
 import Status from "./StatusOrder";
 
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: 40% 1fr;
-  grid-gap: 22px;
-  margin-top: 12px;
-  height: 100%;
-  width: 100%;
-`;
-const ListContainer = styled.div`
-  overflow: auto;
-  height: auto;
-  width: 100%;
-  h2,
-  p {
-    padding: 0;
-    margin: 0;
-  }
-`;
-const List = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 130px 120px;
-`;
-
-const Action = styled.button`
-  background-color: #f39c12;
-  border: 0;
-  margin: 0 0 12px;
-  cursor: pointer;
-  color: #fff;
-  font-size: 16px;
-`;
+import {
+  ContainerOrderList,
+  ListContainer,
+  List,
+  Action,
+  NoData
+} from "../styles/OrderList";
 
 class Orders extends React.Component {
   state = {
+    orders: [],
     order: null,
-    enlistedOrders: []
+    enlistedOrders: [],
+    routes: [],
+    productsSelected: []
   };
 
-  handleUpdatePercentage = product => {
-    const { order, enlistedOrders } = this.state;
+  componentWillReceiveProps(nextProps) {
+    let { orders } = nextProps;
+    const { productsSelected, routes } = this.state;
+
+    if (productsSelected.length) {
+      orders = this.updateOrders(orders, productsSelected, routes);
+    }
+    this.setState({ orders });
+  }
+
+  handleUpdatePercentage = (productsSelected, routes) => {
+    let { order, enlistedOrders } = this.state;
+    const orders = this.updateOrders(
+      this.state.orders,
+      productsSelected,
+      routes
+    );
 
     order.enlistedProducts += 1;
 
@@ -52,8 +44,20 @@ class Orders extends React.Component {
       enlistedOrders.push(order);
     }
 
-    this.setState({ order, enlistedOrders });
+    this.setState({ orders, order, enlistedOrders, productsSelected, routes });
   };
+
+  updateOrders(orders, productsSelected, routes) {
+    orders.forEach((order, index) => {
+      if (routes.includes(order.routeId)) {
+        let products = order.products.filter(product =>
+          productsSelected.includes(product._id)
+        );
+        orders[index].enlistedProducts = products ? products.length : 0;
+      }
+    });
+    return orders;
+  }
 
   handleOnClick = order => {
     if (!order.enlistedProducts) {
@@ -64,35 +68,35 @@ class Orders extends React.Component {
   };
 
   render() {
-    const { order } = this.state;
-    const { orders } = this.props;
+    const { order, orders } = this.state;
 
     return (
-      <Container>
+      <ContainerOrderList>
         <ListContainer>
-          {orders.map(order => (
-            <List key={order._id}>
-              <Order order={order} />
-              <Status
-                numProducts={order.products.length}
-                enlistedProducts={order.enlistedProducts}
-              />
-              <Action onClick={() => this.handleOnClick(order)}>
-                Seleccionar
-              </Action>
-            </List>
-          ))}
+          {orders && orders.length ? (
+            orders.map(order => (
+              <List key={order._id}>
+                <Order order={order} />
+                <Status
+                  numProducts={order.products.length}
+                  enlistedProducts={order.enlistedProducts}
+                />
+                <Action onClick={() => this.handleOnClick(order)}>
+                  Seleccionar
+                </Action>
+              </List>
+            ))
+          ) : (
+            <NoData>Esperando órdenes...</NoData>
+          )}
         </ListContainer>
         <OrderDetail
           onUpdatePercentage={this.handleUpdatePercentage}
           order={order}
         />
-      </Container>
+      </ContainerOrderList>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  orders: state.orders
-});
-export default connect(mapStateToProps)(Orders);
+export default Orders;

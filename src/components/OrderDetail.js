@@ -13,6 +13,9 @@ const Products = styled.div`
   padding: 12px;
   background-color: #f8f8f8;
 `;
+const NoData = styled.div`
+  text-align: center;
+`;
 
 const OrderDetail = props => {
   const { order } = props;
@@ -32,11 +35,14 @@ const OrderDetail = props => {
             <ProductList
               onUpdatePercentage={props.onUpdatePercentage}
               products={order.products}
+              order={order}
             />
           </Products>
         </>
       ) : (
-        <p>No hay datos</p>
+        <NoData>
+          <p>No hay datos</p>
+        </NoData>
       )}
     </Container>
   );

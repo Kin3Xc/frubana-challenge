@@ -19,6 +19,7 @@ const Order = props => {
       <p>
         <b>{order.user.name}</b>
       </p>
+      <p>{order.routeId}</p>
     </Container>
   );
 };

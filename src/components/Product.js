@@ -5,7 +5,10 @@ const Container = styled.div`
   height: auto;
   margin: 0 0 12px;
   padding: 10px;
-  border: 1px #f1c40f solid;
+  border: 1px #f1c40f dashed;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: 16px;
   h2,
   p {
     padding: 0;
@@ -18,10 +21,15 @@ const Product = props => {
 
   return (
     <Container>
-      <p>Name: {product.name}</p>
-      <p>Price: ${product.price}</p>
-      <p>Quantity: {product.quantity}</p>
-      <p>Total: {product.total}</p>
+      <div>
+        <p>Name: {product.name}</p>
+        <p>Price: ${product.price}</p>
+      </div>
+
+      <div>
+        <p>Quantity: {product.quantity}</p>
+        <p>Total: {product.total}</p>
+      </div>
     </Container>
   );
 };

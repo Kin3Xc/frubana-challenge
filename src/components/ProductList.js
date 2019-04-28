@@ -6,6 +6,7 @@ const ListContainer = styled.div`
   overflow: auto;
   height: auto;
   width: 100%;
+  font-size: 16px;
   h2,
   p {
     padding: 0;
@@ -17,41 +18,62 @@ const List = styled.div`
   grid-template-columns: 1fr 16%;
 `;
 const Action = styled.button`
-  background-color: #2ecc71;
+  background-color: #16a085;
   border: 0;
   margin: 0 0 12px;
   cursor: pointer;
   color: #fff;
-  font-size: 16px;
+`;
+const Enlisted = styled.div`
+  text-align: center;
+  background-color: #27ae60;
+  color: #fff;
+  border: 0;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 class ProductList extends React.Component {
   state = {
-    productSelected: []
+    productsSelected: [],
+    routes: []
   };
 
-  handleOnClick = (product, index) => {
-    this.props.onUpdatePercentage(product);
-    let { productSelected } = this.state;
-    productSelected.push(index);
+  handleOnClick = product => {
+    const { order } = this.props;
+    let { productsSelected, routes } = this.state;
 
-    this.setState({ productSelected });
+    this.props.onUpdatePercentage(productsSelected, routes);
+
+    if (!productsSelected.includes(product._id)) {
+      productsSelected.push(product._id);
+    }
+    if (!routes.includes(order.routeId)) {
+      routes.push(order.routeId);
+    }
+
+    this.setState({ productsSelected });
   };
 
   render() {
-    const { products } = this.props;
-    const { productSelected } = this.state;
+    const { products, order } = this.props;
+    const { productsSelected, routes } = this.state;
 
     return (
       <ListContainer>
         {products.map((product, index) => (
           <List key={product._id}>
             <Product product={product} />
-            {!productSelected.includes(index) ? (
-              <Action onClick={() => this.handleOnClick(product, index)}>
+            {!productsSelected.includes(product._id) ||
+            !routes.includes(order.routeId) ? (
+              <Action onClick={() => this.handleOnClick(product)}>
                 Alistar producto
               </Action>
-            ) : null}
+            ) : (
+              <Enlisted>Producto listo</Enlisted>
+            )}
           </List>
         ))}
       </ListContainer>
