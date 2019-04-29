@@ -16,7 +16,7 @@ class Admin extends React.Component {
           <div>{productsSelected.length || 0} Productos listos</div>
           <div>{enlistedOrders.length || 0} Órdenes completadas</div>
           <div>{routes.length || 0} Rutas</div>
-          <div>{unlistedProducts.length || 0} Produstos sin alistar</div>
+          <div>{unlistedProducts.length || 0} Productos sin alistar</div>
         </Info>
       </Container>
     );

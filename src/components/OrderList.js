@@ -153,15 +153,18 @@ class Orders extends React.Component {
             onUpdatePercentage={this.handleUpdatePercentage}
             order={order}
           />
-
-          <Products>
-            <h2>Productos sin ordenar</h2>
-            <ProductList
-              onUpdatePercentage={this.props.onUpdatePercentage}
-              products={unlistedProducts}
-              order={null}
-            />
-          </Products>
+          {unlistedProducts.length ? (
+            <Products>
+              <h2>Productos sin ordenar</h2>
+              <ProductList
+                onUpdatePercentage={this.props.onUpdatePercentage}
+                products={unlistedProducts}
+                order={null}
+              />
+            </Products>
+          ) : (
+            <p>No hay productos</p>
+          )}
         </ContainerOrderList>
       </>
     );

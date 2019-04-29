@@ -5,7 +5,6 @@ const Container = styled.div`
   height: auto;
   margin: 0 0 12px;
   padding: 10px;
-  border: 1px #f1c40f dashed;
   display: grid;
   grid-template-columns: 1fr 1fr;
   font-size: 16px;

@@ -13,24 +13,24 @@ const ListContainer = styled.div`
 `;
 const List = styled.div`
   display: grid;
-  grid-template-columns: 1fr 16%;
+  text-align: center;
+  background: #fff;
+  padding: 4px;
+  margin: 0 0 16px 0;
 `;
 const Action = styled.button`
-  background-color: #16a085;
+  background-color: #f39c12;
   border: 0;
-  margin: 0 0 12px;
   cursor: pointer;
   color: #fff;
+  height: 32px;
 `;
-const Enlisted = styled.div`
+const Enlisted = styled.button`
   text-align: center;
   background-color: #27ae60;
   color: #fff;
   border: 0;
-  margin: 0 0 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 32px;
 `;
 
 export { ListContainer, List, Action, Enlisted };
