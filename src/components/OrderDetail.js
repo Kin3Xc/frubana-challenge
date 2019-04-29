@@ -1,12 +1,6 @@
 import React from "react";
 import ProductList from "./ProductList";
-import {
-  Container,
-  Info,
-  Products,
-  NoData,
-  ContainerViewAllProducts
-} from "../styles/OrderDetail";
+import { Container, Info, Products, NoData } from "../styles/OrderDetail";
 
 class OrderDetail extends React.Component {
   state = {
