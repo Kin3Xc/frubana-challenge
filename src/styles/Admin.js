@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const Info = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-gap: 12px;
   div {
     height: 111px;

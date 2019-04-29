@@ -34,14 +34,16 @@ class ProductList extends React.Component {
         {products.map((product, index) => (
           <List key={product._id}>
             <Product product={product} />
-            {!productsSelected.includes(product._id) ||
-            !routes.includes(order.routeId) ? (
-              <Action onClick={() => this.handleOnClick(product)}>
-                Alistar producto
-              </Action>
-            ) : (
-              <Enlisted>Producto listo</Enlisted>
-            )}
+            {order ? (
+              !productsSelected.includes(product._id) ||
+              !routes.includes(order.routeId) ? (
+                <Action onClick={() => this.handleOnClick(product)}>
+                  Alistar producto
+                </Action>
+              ) : (
+                <Enlisted>Producto listo</Enlisted>
+              )
+            ) : null}
           </List>
         ))}
       </ListContainer>

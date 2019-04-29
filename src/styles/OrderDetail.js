@@ -21,5 +21,16 @@ const Products = styled.div`
 const NoData = styled.div`
   text-align: center;
 `;
+const ContainerViewAllProducts = styled.div`
+  width: 100%;
+  text-align: center;
+  .sin-alistar {
+    color: #3498db;
+    cursor: pointer;
+    font-size: 15px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+`;
 
-export { Container, Info, Products, NoData };
+export { Container, Info, Products, NoData, ContainerViewAllProducts };

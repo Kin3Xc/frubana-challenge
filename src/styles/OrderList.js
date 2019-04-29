@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const ContainerOrderList = styled.div`
   display: grid;
-  grid-template-columns: 40% 1fr;
+  grid-template-columns: 30% 1fr 1fr;
   grid-gap: 22px;
   margin-top: 12px;
   height: 100%;

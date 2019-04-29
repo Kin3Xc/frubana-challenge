@@ -4,6 +4,14 @@ import OrderDetail from "./OrderDetail";
 import Status from "./StatusOrder";
 import Admin from "./Admin";
 import Filter from "./Filter";
+import ProductList from "./ProductList";
+
+import orderBy from "../utils/orderBy";
+import filterOrders from "../utils/filter";
+import enlistedProductsList from "../utils/enlistedProducts";
+import updateOrders from "../utils/updateOrders";
+
+import { Products } from "../styles/OrderDetail";
 
 import {
   ContainerOrderList,
@@ -20,17 +28,24 @@ class Orders extends React.Component {
     enlistedOrders: [],
     routes: [],
     productsSelected: [],
+    unlistedProducts: [],
     options: [],
     filter: ""
   };
 
   componentWillReceiveProps(nextProps) {
     let { orders } = nextProps;
-    let { productsSelected, routes, enlistedOrders, filter } = this.state;
+    let {
+      productsSelected,
+      routes,
+      enlistedOrders,
+      filter,
+      unlistedProducts
+    } = this.state;
     const options = [...new Set(orders.map(order => order.region_code))];
 
     if (productsSelected.length > 0) {
-      let response = this.updateOrders(
+      let response = updateOrders(
         orders,
         productsSelected,
         routes,
@@ -42,18 +57,19 @@ class Orders extends React.Component {
 
     if (filter) {
       if (filter !== "slot" && filter !== "routeId") {
-        orders = this.filterOrders(filter);
+        orders = filterOrders(filter, this.props.orders);
       } else {
-        orders = this.orderBy(filter);
+        orders = orderBy(filter, this.state.orders);
       }
     }
+    unlistedProducts = enlistedProductsList(productsSelected, orders);
 
-    this.setState({ orders, enlistedOrders, options });
+    this.setState({ orders, enlistedOrders, options, unlistedProducts });
   }
 
   handleUpdatePercentage = (productsSelected, routes) => {
-    let { order } = this.state;
-    const { orders, enlistedOrders } = this.updateOrders(
+    let { order, unlistedProducts } = this.state;
+    const { orders, enlistedOrders } = updateOrders(
       this.state.orders,
       productsSelected,
       routes,
@@ -66,23 +82,20 @@ class Orders extends React.Component {
       enlistedOrders.push(order);
     }
 
-    this.setState({ orders, order, enlistedOrders, productsSelected, routes });
-  };
-
-  updateOrders(orders, productsSelected, routes, enlistedOrders) {
-    orders.forEach((order, index) => {
-      if (routes.includes(order.routeId)) {
-        let products = order.products.filter(product =>
-          productsSelected.includes(product._id)
-        );
-        orders[index].enlistedProducts = products ? products.length : 0;
-      }
-    });
-    enlistedOrders = orders.filter(
-      order => order.enlistedProducts === order.products.length
+    unlistedProducts = enlistedProductsList(
+      productsSelected,
+      this.props.orders
     );
-    return { orders, enlistedOrders };
-  }
+
+    this.setState({
+      orders,
+      order,
+      enlistedOrders,
+      productsSelected,
+      routes,
+      unlistedProducts
+    });
+  };
 
   handleOnClick = order => {
     if (!order.enlistedProducts) {
@@ -98,29 +111,17 @@ class Orders extends React.Component {
 
     if (value) {
       if (value !== "slot" && value !== "routeId") {
-        orders = this.filterOrders(value);
+        orders = filterOrders(value, this.props.orders);
       } else {
-        orders = this.orderBy(value);
+        orders = orderBy(value, this.state.orders);
       }
     }
 
     this.setState({ orders, filter: value });
   };
 
-  filterOrders = filter => {
-    let { orders } = this.props;
-    return orders.filter(order => order.region_code === filter);
-  };
-
-  orderBy = orderby => {
-    let { orders } = this.props;
-    return orders.sort((a, b) =>
-      a[orderby] > b[orderby] ? 1 : b[orderby] > a[orderby] ? -1 : 0
-    );
-  };
-
   render() {
-    const { order, orders, options } = this.state;
+    const { order, orders, options, unlistedProducts } = this.state;
 
     return (
       <>
@@ -147,10 +148,20 @@ class Orders extends React.Component {
               <NoData>Esperando órdenes...</NoData>
             )}
           </ListContainer>
+
           <OrderDetail
             onUpdatePercentage={this.handleUpdatePercentage}
             order={order}
           />
+
+          <Products>
+            <h2>Productos sin ordenar</h2>
+            <ProductList
+              onUpdatePercentage={this.props.onUpdatePercentage}
+              products={unlistedProducts}
+              order={null}
+            />
+          </Products>
         </ContainerOrderList>
       </>
     );
