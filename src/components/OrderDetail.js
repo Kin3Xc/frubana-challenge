@@ -1,28 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import ProductList from "./ProductList";
-
-const Container = styled.div`
-  color: #666;
-`;
-const Info = styled.div`
-  padding: 10px;
-  background-color: #ecf0f1;
-  h2,
-  p {
-    padding: 0;
-    margin: 0;
-  }
-`;
-const Products = styled.div`
-  padding: 12px;
-  background-color: #f8f8f8;
-  overflow: auto;
-  height: 63vh;
-`;
-const NoData = styled.div`
-  text-align: center;
-`;
+import { Container, Info, Products, NoData } from "../styles/OrderDetail";
 
 const OrderDetail = props => {
   const { order } = props;

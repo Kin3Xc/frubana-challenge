@@ -12,7 +12,8 @@ const Info = styled.div`
   grid-gap: 12px;
   div {
     height: 111px;
-    background-color: #ecf0f1;
+    background-color: #2ecc71;
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;

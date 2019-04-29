@@ -27,9 +27,9 @@ class Orders extends React.Component {
   componentWillReceiveProps(nextProps) {
     let { orders } = nextProps;
     let { productsSelected, routes, enlistedOrders, filter } = this.state;
-    const options = orders.map(order => order.region_code);
+    const options = [...new Set(orders.map(order => order.region_code))];
 
-    if (productsSelected.length) {
+    if (productsSelected.length > 0) {
       let response = this.updateOrders(
         orders,
         productsSelected,
@@ -40,7 +40,9 @@ class Orders extends React.Component {
       enlistedOrders = response.enlistedOrders;
     }
 
-    orders = this.filterOrders(filter);
+    if (filter) {
+      orders = this.filterOrders(filter);
+    }
 
     this.setState({ orders, enlistedOrders, options });
   }
@@ -88,18 +90,18 @@ class Orders extends React.Component {
 
   handleOnchange = e => {
     const filter = e.target.value;
-    const orders = this.filterOrders(filter);
+    let { orders } = this.props;
+
+    if (filter) {
+      orders = this.filterOrders(filter);
+    }
 
     this.setState({ orders, filter });
   };
 
   filterOrders = filter => {
     let { orders } = this.props;
-
-    if (filter) {
-      return orders.filter(order => order.region_code === filter);
-    }
-    return orders;
+    return orders.filter(order => order.region_code === filter);
   };
 
   render() {
