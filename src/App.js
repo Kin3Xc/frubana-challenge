@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Header from "./components/Header";
+import Header from "./containers/Header";
 import Dashboard from "./containers/Dashboard";
 
 class App extends Component {

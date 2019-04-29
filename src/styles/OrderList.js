@@ -11,7 +11,7 @@ const ContainerOrderList = styled.div`
 `;
 const ListContainer = styled.div`
   overflow: auto;
-  height: auto;
+  height: 77vh;
   width: 100%;
   h2,
   p {
@@ -34,5 +34,26 @@ const Action = styled.button`
 const NoData = styled.div`
   text-align: center;
 `;
+const Switch = styled.div`
+  color: #1abc9c;
+  padding: 10px 0;
+  margin-top: 12px;
+  border-radius: 3px;
+  font-size: 16px;
+  width: 100%;
+  p {
+    width: 120px;
+    cursor: pointer;
+    &:hover {
+      color: #16a085;
+    }
+  }
+  hr {
+    height: 1px;
+    color: #ecf0f1;
+    background-color: #ecf0f1;
+    border: none;
+  }
+`;
 
-export { ContainerOrderList, ListContainer, List, Action, NoData };
+export { ContainerOrderList, ListContainer, List, Action, NoData, Switch };

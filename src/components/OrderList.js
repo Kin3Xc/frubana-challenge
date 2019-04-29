@@ -2,6 +2,7 @@ import React from "react";
 import Order from "./Order";
 import OrderDetail from "./OrderDetail";
 import Status from "./StatusOrder";
+import Admin from "./Admin";
 
 import {
   ContainerOrderList,
@@ -22,20 +23,28 @@ class Orders extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let { orders } = nextProps;
-    const { productsSelected, routes } = this.state;
+    let { productsSelected, routes, enlistedOrders } = this.state;
 
     if (productsSelected.length) {
-      orders = this.updateOrders(orders, productsSelected, routes);
+      let response = this.updateOrders(
+        orders,
+        productsSelected,
+        routes,
+        enlistedOrders
+      );
+      orders = response.orders;
+      enlistedOrders = response.enlistedOrders;
     }
-    this.setState({ orders });
+    this.setState({ orders, enlistedOrders });
   }
 
   handleUpdatePercentage = (productsSelected, routes) => {
-    let { order, enlistedOrders } = this.state;
-    const orders = this.updateOrders(
+    let { order } = this.state;
+    const { orders, enlistedOrders } = this.updateOrders(
       this.state.orders,
       productsSelected,
-      routes
+      routes,
+      this.state.enlistedOrders
     );
 
     order.enlistedProducts += 1;
@@ -47,7 +56,7 @@ class Orders extends React.Component {
     this.setState({ orders, order, enlistedOrders, productsSelected, routes });
   };
 
-  updateOrders(orders, productsSelected, routes) {
+  updateOrders(orders, productsSelected, routes, enlistedOrders) {
     orders.forEach((order, index) => {
       if (routes.includes(order.routeId)) {
         let products = order.products.filter(product =>
@@ -56,7 +65,10 @@ class Orders extends React.Component {
         orders[index].enlistedProducts = products ? products.length : 0;
       }
     });
-    return orders;
+    enlistedOrders = orders.filter(
+      order => order.enlistedProducts === order.products.length
+    );
+    return { orders, enlistedOrders };
   }
 
   handleOnClick = order => {
@@ -71,30 +83,33 @@ class Orders extends React.Component {
     const { order, orders } = this.state;
 
     return (
-      <ContainerOrderList>
-        <ListContainer>
-          {orders && orders.length ? (
-            orders.map(order => (
-              <List key={order._id}>
-                <Order order={order} />
-                <Status
-                  numProducts={order.products.length}
-                  enlistedProducts={order.enlistedProducts}
-                />
-                <Action onClick={() => this.handleOnClick(order)}>
-                  Seleccionar
-                </Action>
-              </List>
-            ))
-          ) : (
-            <NoData>Esperando órdenes...</NoData>
-          )}
-        </ListContainer>
-        <OrderDetail
-          onUpdatePercentage={this.handleUpdatePercentage}
-          order={order}
-        />
-      </ContainerOrderList>
+      <>
+        <Admin {...this.state} />
+        <ContainerOrderList>
+          <ListContainer>
+            {orders && orders.length ? (
+              orders.map(order => (
+                <List key={order._id}>
+                  <Order order={order} />
+                  <Status
+                    numProducts={order.products.length}
+                    enlistedProducts={order.enlistedProducts}
+                  />
+                  <Action onClick={() => this.handleOnClick(order)}>
+                    Seleccionar
+                  </Action>
+                </List>
+              ))
+            ) : (
+              <NoData>Esperando órdenes...</NoData>
+            )}
+          </ListContainer>
+          <OrderDetail
+            onUpdatePercentage={this.handleUpdatePercentage}
+            order={order}
+          />
+        </ContainerOrderList>
+      </>
     );
   }
 }

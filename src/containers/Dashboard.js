@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 import Aside from "./Aside";
 import Content from "./Content";
+import Menu from "./Menu";
 import Orders from "../components/OrderList";
 
 const Container = styled.div`
@@ -17,7 +18,9 @@ const Dashboard = props => {
   const { orders } = props;
   return (
     <Container>
-      <Aside>Menu</Aside>
+      <Aside>
+        <Menu />
+      </Aside>
       <Content>
         <Orders orders={orders} />
       </Content>

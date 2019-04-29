@@ -8,10 +8,17 @@ const Container = styled.div`
 const Info = styled.div`
   padding: 10px;
   background-color: #ecf0f1;
+  h2,
+  p {
+    padding: 0;
+    margin: 0;
+  }
 `;
 const Products = styled.div`
   padding: 12px;
   background-color: #f8f8f8;
+  overflow: auto;
+  height: 63vh;
 `;
 const NoData = styled.div`
   text-align: center;
@@ -25,7 +32,8 @@ const OrderDetail = props => {
       {order ? (
         <>
           <Info>
-            <h2>Region: {order.region_code}</h2>
+            <h2>Orden</h2>
+            <p>Region: {order.region_code}</p>
             <p>Slot: {order.slot}</p>
             <p>User: {order.user.name}</p>
           </Info>
@@ -41,7 +49,7 @@ const OrderDetail = props => {
         </>
       ) : (
         <NoData>
-          <p>No hay datos</p>
+          <p>No hay orden seleccionada</p>
         </NoData>
       )}
     </Container>

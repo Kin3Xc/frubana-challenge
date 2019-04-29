@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.div`
   background-color: #fff;
   width: 100%;
-  height: calc(100vh - 78px);
+  height: calc(100vh - 208px);
 `;
 
 const Content = props => {
