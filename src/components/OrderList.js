@@ -3,6 +3,7 @@ import Order from "./Order";
 import OrderDetail from "./OrderDetail";
 import Status from "./StatusOrder";
 import Admin from "./Admin";
+import Filter from "./Filter";
 
 import {
   ContainerOrderList,
@@ -18,12 +19,15 @@ class Orders extends React.Component {
     order: null,
     enlistedOrders: [],
     routes: [],
-    productsSelected: []
+    productsSelected: [],
+    options: [],
+    filter: ""
   };
 
   componentWillReceiveProps(nextProps) {
     let { orders } = nextProps;
-    let { productsSelected, routes, enlistedOrders } = this.state;
+    let { productsSelected, routes, enlistedOrders, filter } = this.state;
+    const options = orders.map(order => order.region_code);
 
     if (productsSelected.length) {
       let response = this.updateOrders(
@@ -35,7 +39,10 @@ class Orders extends React.Component {
       orders = response.orders;
       enlistedOrders = response.enlistedOrders;
     }
-    this.setState({ orders, enlistedOrders });
+
+    orders = this.filterOrders(filter);
+
+    this.setState({ orders, enlistedOrders, options });
   }
 
   handleUpdatePercentage = (productsSelected, routes) => {
@@ -79,14 +86,33 @@ class Orders extends React.Component {
     this.setState({ order });
   };
 
+  handleOnchange = e => {
+    const filter = e.target.value;
+    const orders = this.filterOrders(filter);
+
+    this.setState({ orders, filter });
+  };
+
+  filterOrders = filter => {
+    let { orders } = this.props;
+
+    if (filter) {
+      return orders.filter(order => order.region_code === filter);
+    }
+    return orders;
+  };
+
   render() {
-    const { order, orders } = this.state;
+    const { order, orders, options } = this.state;
 
     return (
       <>
         <Admin {...this.state} />
         <ContainerOrderList>
           <ListContainer>
+            {orders.length ? (
+              <Filter options={options} onChange={this.handleOnchange} />
+            ) : null}
             {orders && orders.length ? (
               orders.map(order => (
                 <List key={order._id}>
