@@ -1,17 +1,5 @@
 import React from "react";
-import styled from "styled-components";
-
-const Container = styled.div`
-  width: 100%;
-  height: auto;
-  margin: 0 0 10px 0;
-`;
-
-const Select = styled.select`
-  padding: 8px;
-  height: 32px;
-  width: 100%;
-`;
+import { Container, Select } from "../styles/Filter";
 
 class Filter extends React.Component {
   onChange = e => {
@@ -28,6 +16,11 @@ class Filter extends React.Component {
           {options.map((opt, index) => (
             <option key={index}>{opt}</option>
           ))}
+        </Select>
+        <Select onChange={this.onChange}>
+          <option value="">:::: Ordenar por ::::</option>
+          <option value="routeId">Ruta</option>
+          <option value="slot">Slot</option>
         </Select>
       </Container>
     );

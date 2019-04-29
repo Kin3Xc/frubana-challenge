@@ -41,7 +41,11 @@ class Orders extends React.Component {
     }
 
     if (filter) {
-      orders = this.filterOrders(filter);
+      if (filter !== "slot" && filter !== "routeId") {
+        orders = this.filterOrders(filter);
+      } else {
+        orders = this.orderBy(filter);
+      }
     }
 
     this.setState({ orders, enlistedOrders, options });
@@ -89,19 +93,30 @@ class Orders extends React.Component {
   };
 
   handleOnchange = e => {
-    const filter = e.target.value;
+    const value = e.target.value;
     let { orders } = this.props;
 
-    if (filter) {
-      orders = this.filterOrders(filter);
+    if (value) {
+      if (value !== "slot" && value !== "routeId") {
+        orders = this.filterOrders(value);
+      } else {
+        orders = this.orderBy(value);
+      }
     }
 
-    this.setState({ orders, filter });
+    this.setState({ orders, filter: value });
   };
 
   filterOrders = filter => {
     let { orders } = this.props;
     return orders.filter(order => order.region_code === filter);
+  };
+
+  orderBy = orderby => {
+    let { orders } = this.props;
+    return orders.sort((a, b) =>
+      a[orderby] > b[orderby] ? 1 : b[orderby] > a[orderby] ? -1 : 0
+    );
   };
 
   render() {
